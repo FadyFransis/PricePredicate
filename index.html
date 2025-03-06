@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Basic simple html template with css and html">
+    <title>Price Predicate </title>
+    <!-- main css -->
+    <link rel="stylesheet" href="css/leon.css">
+    <!-- normalization -->
+    <link rel="stylesheet" href="css/normalize.css">
+    <!-- fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,200;0,400;0,700;1,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
+    <!-- font awesome -->
+    <link rel="stylesheet" href="css/all.css">
+    <style>
+        body {
+            background: url('/images/background.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: #fff;
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .countdown {
+            font-size: 2rem;
+            margin-top: 20px;
+        }
+        .social-icons a {
+            margin: 10px;
+            color: #fff;
+            font-size: 1.5rem;
+        }
+        .logo {
+            max-width: 300px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+ 
+    <div class="container">
+
+        <h2 class="mb-3">Crypto Market Cap Prediction</h2>
+        <h2>توقع القيمة السوقية للعملات الرقمية</h2>
+
+         
+        <div class="row">
+            <div class="col-md-6">
+                <div class="p-3 border rounded bg-light text-dark">
+                    <h4> بالعربية</h4>
+                    <p>
+                        هذا الموقع يساعدك على توقع القيمة السوقية المستقبلية للعملات الرقمية بناءً على المدخلات التي تقوم بإدخالها.
+                        قم بإدخال القيمة السوقية الأولية، العدد الإجمالي للعملات، والقيمة السوقية المتوقعة خلال عد سنوات معينه ، ثم اضغط على الزر لإنشاء الرسم البياني.
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="p-3 border rounded bg-light text-dark">
+                    <h4>🇬🇧 In English</h4>
+                    <p>
+                        This website helps you predict the future market cap of cryptocurrencies based on the inputs you provide.
+                        Enter the initial market cap, total number of coins, and predicted market cap, then click the button to generate the chart.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-2">
+                <div class="col-md-6">
+                    <label for="initialMarketCap">🚀 القيمة السوقية الأولية ($B) - Initial Market Cap (Billion $):</label>
+                    <input type="number"value="12.5" id="initialMarketCap" class="form-control" placeholder="">
+                </div>
+                <div class="col-md-6">
+                    <label for="finalMarketCap">📈 القيمة السوقية المتوقعة ($B) - Final Market Cap (Billion $):</label>
+                    <input type="number" value="60" id="finalMarketCap" class="form-control" placeholder="">
+                </div>
+                <div class="col-md-3">
+                    <label for="totalCoins">🪙 إجمالي عدد العملات - Total Number of Coins:</label>
+                    <input type="number" value="7.5" id="totalCoins" class="form-control" placeholder="">
+                </div>
+                <div class="col-md-3 pt-4">
+                    <label for="years">⏳ عدد السنوات - Number of Years:</label>
+                    <input type="number" id="years" class="form-control" value="1" min="1" max="5">
+                </div>
+            </div>
+
+        <button class="btn btn-primary mt-3" onclick="generateChart()">إنشاء المخطط - Generate Chart</button>
+
+
+        <canvas id="priceChart" class="mt-4"></canvas>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        let chart;
+        function generateChart() {
+            let initialMarketCap = parseFloat(document.getElementById("initialMarketCap").value);
+            let finalMarketCap = parseFloat(document.getElementById("finalMarketCap").value);
+            let totalCoins = parseFloat(document.getElementById("totalCoins").value);
+            let years = parseInt(document.getElementById("years").value);
+
+            if (!initialMarketCap || !finalMarketCap || !totalCoins || initialMarketCap >= finalMarketCap || !years) {
+                alert("يرجى إدخال قيم صحيحة! - Please enter valid values!");
+                return;
+            }
+
+            let days = years * 365;
+            let labels = [];
+            let marketCaps = [initialMarketCap];
+            let prices = [initialMarketCap / totalCoins];
+            let currentMarketCap = initialMarketCap;
+            let stepIncrease = (finalMarketCap - initialMarketCap) / days;
+
+            for (let i = 1; i <= days; i++) {
+                let fluctuation = (Math.random() - 0.5) * 0.05 * currentMarketCap;
+                let newMarketCap = currentMarketCap + stepIncrease + fluctuation;
+                if (newMarketCap > finalMarketCap) newMarketCap = finalMarketCap;
+                marketCaps.push(newMarketCap);
+                prices.push(parseFloat((newMarketCap / totalCoins).toFixed(2)));
+                
+                if (years > 2 && i % 30 === 0) 
+             //   console.log (Math.floor(i / 30))
+                labels.push(`Month ${Math.floor(i / 30)}`);
+                else if (years <= 2) labels.push(` Day ${i}`);
+              //  else labels.push("");
+                
+                currentMarketCap = newMarketCap;
+            }
+            marketCaps.push(finalMarketCap);
+            prices.push(parseFloat((finalMarketCap / totalCoins).toFixed(2)));
+            labels.push("النهاية - Final");
+            
+            if (chart) chart.destroy();
+            let ctx = document.getElementById("priceChart").getContext("2d");
+            chart = new Chart(ctx, {
+                type: "line",
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: "السعر المتوقع ($) - Predicted Price ($)",
+                        data: prices,
+                        borderColor: "rgba(255, 0, 0, 0.9)",
+                        backgroundColor: "rgba(255, 0, 0, 0.2)",
+                        fill: true,
+                        borderWidth: 2,
+                        pointRadius: 0,
+                        tension: 0.2, 
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    animation: { duration: 3000 },
+                    plugins: {
+                        legend: { labels: { color: "white" } },
+                        zoom: {
+                            pan: { enabled: true, mode: "x" },
+                            zoom: {
+                                wheel: { enabled: true },
+                                pinch: { enabled: true },
+                                mode: "x",
+                            }
+                        },
+                                
+                    },
+                    scales: {
+                        x: {
+                            ticks: { color: "white" },
+                        },
+                        y: {
+                            ticks: { 
+                                color: "white",
+                                callback: function(value) { return "$" + value.toFixed(2); }
+                            },
+                            
+                                suggestedMin: Math.min(...prices) * 0.9,  // Slightly below min value
+                                suggestedMax: Math.max(...prices) * 1.1,  // Slightly above max value
+                            
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+
+
+<!-- 
+<script>
+    let chart;
+
+    function generateChart() {
+        let initialMarketCap = parseFloat(document.getElementById("initialMarketCap").value);
+        let finalMarketCap = parseFloat(document.getElementById("finalMarketCap").value);
+        let totalCoins = parseFloat(document.getElementById("totalCoins").value);
+
+        if (!initialMarketCap || !finalMarketCap || !totalCoins || initialMarketCap >= finalMarketCap) {
+            alert("Please enter valid values (Initial Market Cap must be less than Final Market Cap)!");
+            return;
+        }
+
+        let days = 5 * 365; // 5 years of daily data
+        let labels = [];
+        let marketCaps = [initialMarketCap]; 
+        let prices = [initialMarketCap / totalCoins]; 
+
+        let currentMarketCap = initialMarketCap;
+        let stepIncrease = (finalMarketCap - initialMarketCap) / days;
+        
+        for (let i = 1; i <= days; i++) {
+            let fluctuation = (Math.random() - 0.5) * 0.05 * currentMarketCap; 
+            let newMarketCap = currentMarketCap + stepIncrease + fluctuation;
+
+            if (newMarketCap > finalMarketCap) newMarketCap = finalMarketCap; 
+
+            marketCaps.push(newMarketCap);
+            prices.push(parseFloat((newMarketCap / totalCoins).toFixed(2))); // Ensure decimal format
+            if (i % 365 === 0) labels.push(`Year ${i / 365}`); // Only show labels for years
+            else             labels.push(`Day ${i}`);
+            ; // Hide daily labels
+
+            currentMarketCap = newMarketCap;
+        }
+
+        marketCaps.push(finalMarketCap);
+        prices.push(parseFloat((finalMarketCap / totalCoins).toFixed(2)));
+        labels.push("Final");
+
+        if (chart) {
+            chart.destroy();
+        }
+
+        let ctx = document.getElementById("priceChart").getContext("2d");
+        chart = new Chart(ctx, {
+            type: "line",
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: "Predicted Price ($)",
+                    data: prices,
+                    borderColor: "rgba(255, 0, 0, 0.9)",
+                    backgroundColor: "rgba(255, 0, 0, 0.2)",
+                    fill: true,
+                    borderWidth: 2,
+                    pointRadius: 0, // Smooth line
+                    tension: 0.2, 
+                }]
+            },
+            options: {
+                responsive: true,
+                animation: { duration: 3000 },
+                plugins: {
+                    legend: { labels: { color: "white" } },
+                    zoom: {
+                        pan: { enabled: true, mode: "x" },
+                        zoom: {
+                            wheel: { enabled: true },
+                            pinch: { enabled: true },
+                            mode: "x",
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        ticks: { color: "white" },
+                        x: { ticks: { color: "white", maxRotation: 45, minRotation: 45 } },
+                        y: { ticks: { color: "white" } }
+                    },
+                    y: {
+                        ticks: { 
+                            color: "white",
+                            callback: function(value) { return "$" + value.toFixed(2); } // Ensure cents format
+                        }
+                    }
+                }
+            }
+        });
+    }
+</script> -->
+
+</body>
+</html>
