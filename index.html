@@ -27,14 +27,19 @@
             text-align: center;
             font-family: Arial, sans-serif;
         }
-        .container {
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-        .countdown {
+        .navbar {
+    background-color: #f8f9fa !important; /* لون فاتح */
+    border-bottom: 2px solid #ddd; /* خط تحت النافبار */
+}
+
+.navbar .nav-link {
+    color: #333 !important; /* تغيير لون الروابط */
+}
+
+.navbar .navbar-brand {
+    color: #000 !important; /* تغيير لون اسم الموقع */
+}
+   .countdown {
             font-size: 2rem;
             margin-top: 20px;
         }
@@ -51,7 +56,31 @@
 </head>
 <body>
 
- 
+    <nav class="navbar navbar-expand-lg ">
+        <div class="container">
+            <a class="navbar-brand" href="#">Price-Predicate</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/about.html">About</a>
+                    </li>
+                    <!-- <li class="nav-item">
+                        <a class="nav-link" href="#about">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contact">Contact</a>
+                    </li> -->
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
     <div class="container">
 
         <h2 class="mb-3">Crypto Market Cap Prediction</h2>
@@ -94,10 +123,14 @@
                 <div class="col-md-3 pt-4">
                     <label for="years">⏳ عدد السنوات - Number of Years:</label>
                     <input type="number" id="years" class="form-control" value="1" min="1" max="5">
+                </div> 
+                <div class="col-sm-3 pt-4">
+                    <button class="btn btn-primary mt-3" onclick="generateChart()">إنشاء المخطط - Generate Chart</button>
+
                 </div>
             </div>
 
-        <button class="btn btn-primary mt-3" onclick="generateChart()">إنشاء المخطط - Generate Chart</button>
+      
 
 
         <canvas id="priceChart" class="mt-4"></canvas>
